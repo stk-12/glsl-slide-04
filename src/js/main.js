@@ -98,6 +98,7 @@ async function init(){
   mesh = new THREE.Mesh(geometry, material);
   scene.add(mesh);
 
+
   // lil-guiの設定
   const textures = {
     displacement: textureDisp
@@ -105,12 +106,14 @@ async function init(){
   const settings = {
     duration: 1.8,
     delay: 4.0,
+    ease: 'power2.inOut',
   }
+  const easeOptions = ['power2.inOut', 'power3.inOut', 'circ.inOut', 'power2.out', 'power3.out', 'circ.out', 'linear'];
 
   const gui = new GUI();
+
   const textureFolder = gui.addFolder('変形テクスチャ');
   const textureUpload = document.getElementById('texture-upload');
-
   textureFolder.add({ upload: () => { textureUpload.click(); } }, 'upload').name('変形用画像をアップロートする');
 
   textureUpload.addEventListener('change', (event) => {
@@ -129,7 +132,6 @@ async function init(){
   });
   textureFolder.open();
 
-
   const gsapFolder = gui.addFolder('アニメーション設定');
   gsapFolder.add(settings, 'duration', 0.1, 3.0, 0.1).name('変化秒数').onChange((value) => {
     settings.duration = value;
@@ -139,44 +141,15 @@ async function init(){
     settings.delay = value;
     updateTimeline();
   });
+  gsapFolder.add(settings, 'ease', easeOptions).name('イージング').onChange((value) => {
+    settings.ease = value;
+    updateTimeline();
+  });
   gsapFolder.open();
 
-  //Progress
-  // const tl = gsap.timeline({ repeat: -1 });
-  // tl.to(uniforms.uProgress, {
-  //   value: 1.0,
-  //   duration: duration,
-  //   delay: 4,
-  //   ease: 'power3.out',
-  //   onComplete: ()=>{
-  //     uniforms.uTexCurrent.value = texture02;
-  //     uniforms.uTexNext.value = texture03;
-  //     uniforms.uProgress.value = 0.0;
-  //   },
-  // })
-  // .to(uniforms.uProgress, {
-  //   value: 1.0,
-  //   duration: duration,
-  //   delay: 4,
-  //   ease: 'power2.inOut',
-  //   onComplete: ()=>{
-  //     uniforms.uTexCurrent.value = texture03;
-  //     uniforms.uTexNext.value = texture01;
-  //     uniforms.uProgress.value = 0.0;
-  //   },
-  // })
-  // .to(uniforms.uProgress, {
-  //   value: 1.0,
-  //   duration: duration,
-  //   delay: 4,
-  //   ease: Circ.easeInOut,
-  //   onComplete: ()=>{
-  //     uniforms.uTexCurrent.value = texture01;
-  //     uniforms.uTexNext.value = texture02;
-  //     uniforms.uProgress.value = 0.0;
-  //   },
-  // });
 
+
+  // タイムライン設定
   let timeline = gsap.timeline({ repeat: -1 });
 
   function updateTimeline() {
@@ -187,7 +160,7 @@ async function init(){
       value: 1.0,
       duration: settings.duration,
       delay: settings.delay,
-      ease: 'power2.inOut',
+      ease: settings.ease,
       onComplete: ()=>{
         uniforms.uTexCurrent.value = texture02;
         uniforms.uTexNext.value = texture03;
@@ -198,7 +171,7 @@ async function init(){
       value: 1.0,
       duration: settings.duration,
       delay: settings.delay,
-      ease: 'power2.inOut',
+      ease: settings.ease,
       onComplete: ()=>{
         uniforms.uTexCurrent.value = texture03;
         uniforms.uTexNext.value = texture01;
@@ -209,7 +182,7 @@ async function init(){
       value: 1.0,
       duration: settings.duration,
       delay: settings.delay,
-      ease: 'power2.inOut',
+      ease: settings.ease,
       onComplete: ()=>{
         uniforms.uTexCurrent.value = texture01;
         uniforms.uTexNext.value = texture02;
