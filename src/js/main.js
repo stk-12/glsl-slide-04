@@ -71,7 +71,7 @@ async function init(){
     direction: '右から左',
     strength: 1.0,
   }
-  const easeOptions = ['power2.inOut', 'power3.inOut', 'circ.inOut', 'power2.out', 'power3.out', 'circ.out', 'linear'];
+  const easeOptions = ['power2.inOut', 'power4.inOut', 'circ.inOut', 'expo.inOut', 'power2.out', 'power4.out', 'circ.out', 'expo.out', 'none'];
 
   const directionOptions = {
     '右から左': 0,
