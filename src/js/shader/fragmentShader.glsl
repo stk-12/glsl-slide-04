@@ -7,6 +7,7 @@ uniform vec2 uResolution;
 uniform vec2 uTexResolution;
 uniform float uProgress;
 uniform int uDirection;
+uniform float uStrength;
 
 
 float parabola( float x, float k ) {
@@ -27,7 +28,7 @@ void main() {
   );
 
   vec3 texDisp = texture2D(uTexDisp, uv).rgb;
-  float disp = texDisp.r;
+  float disp = texDisp.r * uStrength;
   disp = disp * parabola(uProgress, 0.8);
 
   vec2 dispUv = uv;

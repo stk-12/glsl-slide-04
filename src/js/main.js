@@ -69,6 +69,7 @@ async function init(){
     delay: 4.0,
     ease: 'power2.inOut',
     direction: '右から左',
+    strength: 1.0,
   }
   const easeOptions = ['power2.inOut', 'power3.inOut', 'circ.inOut', 'power2.out', 'power3.out', 'circ.out', 'linear'];
 
@@ -104,6 +105,9 @@ async function init(){
     },
     uDirection: {
       value: directionOptions[settings.direction],
+    },
+    uStrength: {
+      value: 1.0
     }
   };
 
@@ -156,10 +160,14 @@ async function init(){
     settings.ease = value;
     updateTimeline();
   });
-  gsapFolder.add(settings, 'direction', Object.keys(directionOptions)).name('方向').onChange((value) => {
+  gsapFolder.add(settings, 'direction', Object.keys(directionOptions)).name('変形方向').onChange((value) => {
     settings.direction = value;
     uniforms.uDirection.value = directionOptions[value];
     // updateTimeline();
+  });
+  gsapFolder.add(settings, 'strength', 0.1, 3.0, 0.1).name('変形強度').onChange((value) => {
+    settings.strength = value;
+    uniforms.uStrength.value = value;
   });
   gsapFolder.open();
 
