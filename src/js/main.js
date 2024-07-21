@@ -61,6 +61,24 @@ async function init(){
 
   const textureDisp = await loader.loadAsync(imgDisp1);
 
+  const textures = {
+    displacement: textureDisp
+  };
+  const settings = {
+    duration: 1.8,
+    delay: 4.0,
+    ease: 'power2.inOut',
+    direction: '右から左',
+  }
+  const easeOptions = ['power2.inOut', 'power3.inOut', 'circ.inOut', 'power2.out', 'power3.out', 'circ.out', 'linear'];
+
+  const directionOptions = {
+    '右から左': 0,
+    '上から下': 1,
+    '右上から左下': 2,
+    '左下から右上': 3,
+  };
+
   //GLSL用データ
   let uniforms = {
     uTime: {
@@ -84,6 +102,9 @@ async function init(){
     uProgress: {
       value: 0.0
     },
+    uDirection: {
+      value: directionOptions[settings.direction],
+    }
   };
 
   //マテリアル
@@ -100,16 +121,6 @@ async function init(){
 
 
   // lil-guiの設定
-  const textures = {
-    displacement: textureDisp
-  };
-  const settings = {
-    duration: 1.8,
-    delay: 4.0,
-    ease: 'power2.inOut',
-  }
-  const easeOptions = ['power2.inOut', 'power3.inOut', 'circ.inOut', 'power2.out', 'power3.out', 'circ.out', 'linear'];
-
   const gui = new GUI();
 
   const textureFolder = gui.addFolder('変形テクスチャ');
@@ -144,6 +155,11 @@ async function init(){
   gsapFolder.add(settings, 'ease', easeOptions).name('イージング').onChange((value) => {
     settings.ease = value;
     updateTimeline();
+  });
+  gsapFolder.add(settings, 'direction', Object.keys(directionOptions)).name('方向').onChange((value) => {
+    settings.direction = value;
+    uniforms.uDirection.value = directionOptions[value];
+    // updateTimeline();
   });
   gsapFolder.open();
 
