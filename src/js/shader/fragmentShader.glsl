@@ -42,25 +42,29 @@ void main() {
 
   vec3 texDisp = texture2D(uTexDisp, uv).rgb;
   float disp = texDisp.r;
-  disp = disp * parabola(uProgress, 1.0);
+  disp = disp * parabola(uProgress, 0.8);
 
   // 右から左
   // vec2 dispUv = vec2(uv.x + disp, uv.y);
   // vec2 dispUv2 = vec2(uv.x - disp, uv.y);
-  
+  // 右から左（変形を小さく）
+  // vec2 dispUv = vec2(uv.x + disp * 0.5, uv.y);
+  // vec2 dispUv2 =  vec2(uv.x - disp * 0.5, uv.y);
+
   // 上から下
   // vec2 dispUv = vec2(uv.x, uv.y + disp);
   // vec2 dispUv2 = vec2(uv.x, uv.y - disp);
 
   // 右上から左下
-  // vec2 dispUv = vec2(uv.x + disp, uv.y + disp);
-  // vec2 dispUv2 = vec2(uv.x - disp, uv.y - disp);
-  // vec2 dispUv = vec2(uv + disp);
-  // vec2 dispUv2 = vec2(uv - disp);
+  vec2 dispUv = vec2(uv + disp);
+  vec2 dispUv2 = vec2(uv - disp);
+  // 右上から左下（変形を小さく）
+  // vec2 dispUv = uv + vec2(disp) * 0.3;
+  // vec2 dispUv2 = uv - vec2(disp) * 0.3;
 
   // 左下から右上
-  vec2 dispUv = vec2(uv - disp);
-  vec2 dispUv2 = vec2(uv + disp);
+  // vec2 dispUv = vec2(uv - disp);
+  // vec2 dispUv2 = vec2(uv + disp);
 
 
   vec3 tex1 = texture2D(uTexCurrent, dispUv).rgb;
